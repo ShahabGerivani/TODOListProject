@@ -74,7 +74,7 @@ class Task(NamedEntity):
         return self.__deadline
 
     @deadline.setter
-    def deadline(self, value: datetime):
-        if value < datetime.now():
+    def deadline(self, value: datetime | None):
+        if value is not None and value < datetime.now():
             raise ValueError("Deadline must be in the future")
         self.__deadline = value

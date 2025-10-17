@@ -95,7 +95,7 @@ class InMemoryDB(DBInterface):
         match table:
             case "projects":
                 project = cast(Project, self.__projects[entity_id])
-                for task in project.tasks:
+                for task in project.tasks.values():
                     del self.__tasks[task.entity_id]
                 del self.__projects[entity_id]
             case "tasks":
