@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Any
-from dotenv import load_dotenv
 import os
 from typing import cast
+
+from dotenv import load_dotenv
 
 from src.TODOListProject.exceptions import DBFullError
 from src.TODOListProject.models import NamedEntity, Project, Task
@@ -10,11 +11,11 @@ from src.TODOListProject.models import NamedEntity, Project, Task
 
 class DBInterface(ABC):
     @abstractmethod
-    def get_all(self, table: str) -> list | None:
+    def get_all(self, table: str) -> list:
         pass
 
     @abstractmethod
-    def get_by_id(self, table: str, entity_id: int) -> object | None:
+    def get_by_id(self, table: str, entity_id: int) -> object:
         pass
 
     @abstractmethod
@@ -26,21 +27,21 @@ class DBInterface(ABC):
         pass
 
     @abstractmethod
-    def get_next_id(self, table: str) -> int | None:
+    def get_next_id(self, table: str) -> int:
         pass
 
 
 class InMemoryDB(DBInterface):
     def __init__(self):
-        self.__projects = {}
-        self.__tasks = {}
-        self.__projects_next_id = 0
-        self.__tasks_next_id = 0
+        self.__projects: dict[int, Project] = {}
+        self.__tasks: dict[int, Task] = {}
+        self.__projects_next_id: int = 0
+        self.__tasks_next_id: int = 0
         load_dotenv()
         self.__MAX_NUMBER_OF_PROJECT = int(os.getenv("MAX_NUMBER_OF_PROJECT"))
         self.__MAX_NUMBER_OF_TASK = int(os.getenv("MAX_NUMBER_OF_TASK"))
 
-    def get_all(self, table: str) -> list[Any] | None:
+    def get_all(self, table: str) -> list[Any]:
         match table:
             case "projects":
                 return list(self.__projects.values())
@@ -49,7 +50,7 @@ class InMemoryDB(DBInterface):
             case _:
                 raise ValueError("Invalid table")
 
-    def get_by_id(self, table: str, entity_id: int) -> object | None:
+    def get_by_id(self, table: str, entity_id: int) -> object:
         match table:
             case "projects":
                 return self.__projects[entity_id]
@@ -67,12 +68,12 @@ class InMemoryDB(DBInterface):
                         raise ValueError(f"Project with name '{entity.name}' already exists.")
                 # -- Update --
                 if entity.entity_id in self.__projects:
-                    self.__projects[entity.entity_id] = entity
+                    self.__projects[entity.entity_id] = cast(Project, entity)
                     return
                 # -- Insert --
                 if len(self.__projects) >= self.__MAX_NUMBER_OF_PROJECT:
                     raise DBFullError("Maximum number of projects reached")
-                self.__projects[entity.entity_id] = entity
+                self.__projects[entity.entity_id] = cast(Project, entity)
                 self.__projects_next_id += 1
             case "tasks":
                 task = cast(Task, entity)
@@ -106,7 +107,7 @@ class InMemoryDB(DBInterface):
             case _:
                 raise ValueError("Invalid table")
 
-    def get_next_id(self, table: str) -> int | None:
+    def get_next_id(self, table: str) -> int:
         match table:
             case "projects":
                 return self.__projects_next_id

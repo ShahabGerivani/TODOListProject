@@ -132,7 +132,6 @@ def handle_del(controller: ProjectTaskController, action: list[str]) -> None:
 def run_cli(controller: ProjectTaskController):
     print("TODO List")
     action: list[str] = ["help"]
-    valid_input = True
     while True:
         # Checking if the input format is correct
         try:

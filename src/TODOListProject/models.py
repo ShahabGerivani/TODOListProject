@@ -40,7 +40,7 @@ class NamedEntity:
 class Project(NamedEntity):
     def __init__(self, project_id: int, name: str, description: str):
         super().__init__(project_id, name, description)
-        self.tasks = {}
+        self.tasks: dict[int, Task] = {}
 
 
 class TaskStatus(Enum):

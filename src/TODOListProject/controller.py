@@ -54,4 +54,4 @@ class ProjectTaskController:
         self.__db.delete("tasks", task_id)
 
     def get_all_tasks(self, project_id: int) -> list[Task]:
-        return cast(Project, self.__db.get_by_id("projects", project_id)).tasks.values()
+        return list(cast(Project, self.__db.get_by_id("projects", project_id)).tasks.values())
