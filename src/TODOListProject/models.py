@@ -40,7 +40,7 @@ class NamedEntity:
 class Project(NamedEntity):
     def __init__(self, project_id: int, name: str, description: str):
         super().__init__(project_id, name, description)
-        self.tasks = []
+        self.tasks = {}
 
 
 class TaskStatus(Enum):
@@ -50,18 +50,16 @@ class TaskStatus(Enum):
 
 
 class Task(NamedEntity):
-    def __init__(self, task_id: int, name: str, description: str, project: Project,
-                 status: TaskStatus = TaskStatus.todo,
-                 deadline: datetime = None):
+    def __init__(self, task_id: int, project_id: int, name: str, description: str, status: TaskStatus,
+                 deadline: datetime):
         super().__init__(task_id, name, description)
-        self.__project = project
+        self.__project_id = project_id
         self.status = status
         self.deadline = deadline
-        project.tasks.append(self)
 
     @property
-    def project(self):
-        return self.__project
+    def project_id(self):
+        return self.__project_id
 
     @property
     def status(self):
@@ -77,4 +75,6 @@ class Task(NamedEntity):
 
     @deadline.setter
     def deadline(self, value: datetime):
+        if value < datetime.now():
+            raise ValueError("Deadline must be in the future")
         self.__deadline = value
