@@ -1,8 +1,11 @@
+"""Data Models"""
+
 from datetime import datetime
 from enum import Enum
 
 
 class NamedEntity:
+    """Base class for Project and Task"""
     def __init__(self, entity_id: int, name: str, description: str):
         self.entity_id = entity_id
         self.name = name
@@ -22,6 +25,11 @@ class NamedEntity:
 
     @name.setter
     def name(self, value: str) -> None:
+        """
+        :raises ValueError: If name is more than 30 words
+        :param value:
+        :return:
+        """
         if len(value.split()) >= 30:
             raise ValueError("Name too long")
         self.__name = value
@@ -32,6 +40,11 @@ class NamedEntity:
 
     @description.setter
     def description(self, value: str) -> None:
+        """
+        :raises ValueError: If description is more than 150 words
+        :param value:
+        :return:
+        """
         if len(value.split()) >= 150:
             raise ValueError("Description too long")
         self.__description = value
@@ -75,6 +88,11 @@ class Task(NamedEntity):
 
     @deadline.setter
     def deadline(self, value: datetime | None):
+        """
+        :raises ValueError: If deadline is in the past
+        :param value:
+        :return:
+        """
         if value is not None and value < datetime.now():
             raise ValueError("Deadline must be in the future")
         self.__deadline = value

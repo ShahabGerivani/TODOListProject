@@ -1,3 +1,5 @@
+"""Database"""
+
 from abc import ABC, abstractmethod
 from typing import Any
 import os
@@ -10,6 +12,8 @@ from src.TODOListProject.models import NamedEntity, Project, Task
 
 
 class DBInterface(ABC):
+    """Abstract interface for DB interactions."""
+
     @abstractmethod
     def get_all(self, table: str) -> list:
         pass
@@ -32,6 +36,16 @@ class DBInterface(ABC):
 
 
 class InMemoryDB(DBInterface):
+    """
+    In memory DB interface.
+
+    The projects and tasks are stored in dictionaries with their ID as key.
+
+    IDs are kept track using __projects_next_id and __tasks_next_id.
+
+    Maximum number of projects and tasks are loaded from .env file
+    """
+
     def __init__(self):
         self.__projects: dict[int, Project] = {}
         self.__tasks: dict[int, Task] = {}
@@ -42,6 +56,12 @@ class InMemoryDB(DBInterface):
         self.__MAX_NUMBER_OF_TASK = int(os.getenv("MAX_NUMBER_OF_TASK"))
 
     def get_all(self, table: str) -> list[Any]:
+        """
+        Get all entities in table (projects/tasks).
+        :param table: Either "projects" or "tasks"
+        :return: The list of all Tasks or Projects
+        :raise ValueError: If table is not "projects" or "tasks"
+        """
         match table:
             case "projects":
                 return list(self.__projects.values())
@@ -51,6 +71,14 @@ class InMemoryDB(DBInterface):
                 raise ValueError("Invalid table")
 
     def get_by_id(self, table: str, entity_id: int) -> object:
+        """
+        Get entity (Project/Task) by ID.
+        :param table: Either "projects" or "tasks"
+        :param entity_id: entity_id of project/task
+        :return: The specified Project or Task
+        :raise ValueError: If table is not "projects" or "tasks"
+        :raise KeyError: If not found
+        """
         match table:
             case "projects":
                 return self.__projects[entity_id]
@@ -60,6 +88,14 @@ class InMemoryDB(DBInterface):
                 raise ValueError("Invalid table")
 
     def update_or_insert(self, table: str, entity: NamedEntity) -> None:
+        """
+        Update/Insert entity (Project/Task) in database.
+        :param table: Either "projects" or "tasks"
+        :param entity: The Project or Task to update/insert. Update if the entities entity_id is already in the database. Insert otherwise.
+        :return:
+        :raise ValueError: If table is not "projects" or "tasks", or if project name is duplicated.
+        :raise DBFullError: If maximum number of projects or tasks is reached.
+        """
         match table:
             case "projects":
                 # Checking for duplicate names
@@ -93,6 +129,14 @@ class InMemoryDB(DBInterface):
                 raise ValueError("Invalid table")
 
     def delete(self, table: str, entity_id: int) -> None:
+        """
+        Delete entity (Project/Task) by ID.
+        :param table: Either "projects" or "tasks
+        :param entity_id:
+        :return:
+        :raise ValueError: If table is not "projects" or "tasks"
+        :raise KeyError: If not found
+        """
         match table:
             case "projects":
                 project = cast(Project, self.__projects[entity_id])
@@ -108,6 +152,12 @@ class InMemoryDB(DBInterface):
                 raise ValueError("Invalid table")
 
     def get_next_id(self, table: str) -> int:
+        """
+        Get next available ID for table (projects/tasks).
+        :param table: Either "projects" or "tasks"
+        :return: The next available ID in table (used for insertion)
+        :raise ValueError: If table is not "projects" or "tasks"
+        """
         match table:
             case "projects":
                 return self.__projects_next_id

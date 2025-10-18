@@ -5,6 +5,12 @@ from src.TODOListProject.models import TaskStatus
 
 
 def handle_view(controller: ProjectTaskController, action: list[str]) -> None:
+    """
+    Handler function for viewing projects or tasks
+    :param controller: Controller instance
+    :param action: The input line converted to a list of words (look into run_cli)
+    :return:
+    """
     if action[1] == "p":
         projects = controller.get_all_projects()
         if len(projects) == 0:
@@ -35,6 +41,12 @@ def handle_view(controller: ProjectTaskController, action: list[str]) -> None:
 
 
 def handle_add(controller: ProjectTaskController, action: list[str]) -> None:
+    """
+    Handler function for adding new projects or tasks
+    :param controller: Controller instance
+    :param action: The input line converted to a list of words (look into run_cli)
+    :return:
+    """
     if action[1] != "p" and action[1] != "t":
         print("Invalid action")
         return
@@ -70,6 +82,12 @@ def handle_add(controller: ProjectTaskController, action: list[str]) -> None:
 
 
 def handle_edit(controller: ProjectTaskController, action: list[str]) -> None:
+    """
+    Handler function for editing projects or tasks
+    :param controller: Controller instance
+    :param action: The input line converted to a list of words (look into run_cli)
+    :return:
+    """
     if action[1] != "p" and action[1] != "t":
         print("Invalid action")
         return
@@ -117,6 +135,12 @@ def handle_edit(controller: ProjectTaskController, action: list[str]) -> None:
 
 
 def handle_del(controller: ProjectTaskController, action: list[str]) -> None:
+    """
+    Handler function for deleting projects or tasks
+    :param controller: Controller instance
+    :param action: The input line converted to a list of words (look into run_cli)
+    :return:
+    """
     if len(action) != 3:
         print("No id")
         return
@@ -130,6 +154,11 @@ def handle_del(controller: ProjectTaskController, action: list[str]) -> None:
 
 
 def run_cli(controller: ProjectTaskController):
+    """
+    The main entry point for the CLI
+    :param controller: Controller instance
+    :return:
+    """
     print("TODO List")
     action: list[str] = ["help"]
     while True:
