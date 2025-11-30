@@ -65,7 +65,10 @@ class ProjectTaskController:
         :return:
         :raise DBFullError: If maximum number of tasks is reached.
         :raise KeyError: If project not found
+        :raises ValueError: If deadline is in the past
         """
+        if deadline is not None and deadline < datetime.now():
+            raise ValueError("Deadline must be in the future")
         self.__db.update_or_insert(
             "tasks",
             Task(self.__db.get_next_id("tasks"), project_id, name, description, status, deadline)
@@ -82,6 +85,7 @@ class ProjectTaskController:
         :param deadline:
         :return:
         :raise KeyError: If not found
+        :raises ValueError: If deadline is in the past
         """
         task = cast(Task, self.__db.get_by_id("tasks", task_id))
         new_task = Task(task_id, task.project_id, task.name, task.description, task.status, task.deadline)
@@ -92,6 +96,8 @@ class ProjectTaskController:
         if status is not None:
             new_task.status = status
         if deadline is not None:
+            if deadline < datetime.now():
+                raise ValueError("Deadline must be in the future")
             new_task.deadline = deadline
         self.__db.update_or_insert("tasks", new_task)
 

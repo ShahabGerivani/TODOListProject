@@ -50,12 +50,6 @@ class NamedEntity:
         self.__description = value
 
 
-class Project(NamedEntity):
-    def __init__(self, project_id: int, name: str, description: str):
-        super().__init__(project_id, name, description)
-        self.tasks: dict[int, Task] = {}
-
-
 class TaskStatus(Enum):
     todo = 1
     doing = 2
@@ -93,6 +87,12 @@ class Task(NamedEntity):
         :param value:
         :return:
         """
-        if value is not None and value < datetime.now():
-            raise ValueError("Deadline must be in the future")
         self.__deadline = value
+
+
+class Project(NamedEntity):
+    def __init__(self, project_id: int, name: str, description: str, tasks: dict[int, Task]=None):
+        super().__init__(project_id, name, description)
+        if tasks is None:
+            tasks = {}
+        self.tasks: dict[int, Task] = tasks
