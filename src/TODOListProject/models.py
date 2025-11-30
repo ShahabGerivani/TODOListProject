@@ -87,8 +87,6 @@ class Task(NamedEntity):
         :param value:
         :return:
         """
-        if value is not None and value < datetime.now():
-            raise ValueError("Deadline must be in the future")
         self.__deadline = value
 
 
