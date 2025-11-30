@@ -193,7 +193,9 @@ class RelationalDB(DBInterface):
         with Session(self.__engine) as session:
             match table:
                 case "projects":
-                    return [Project(proj.id, proj.name, proj.description) for proj in
+                    return [Project(proj.id, proj.name, proj.description, {
+                        task.id: Task(task.id, task.project_id, task.name, task.description, task.status, task.deadline)
+                        for task in proj.tasks}) for proj in
                             session.scalars(select(orm_models.Project)).all()]
                 case "tasks":
                     return [Task(task.id, task.project_id, task.name, task.description, task.status, task.deadline) for
@@ -261,8 +263,9 @@ class RelationalDB(DBInterface):
                     session.add(orm_models.Project(name=entity.name, description=entity.description))
                 case "tasks":
                     task = cast(Task, entity)
-                    existing: orm_models.Task | None = None if entity.entity_id is None else session.get(orm_models.Task,
-                                                                                                     entity.entity_id)
+                    existing: orm_models.Task | None = None if entity.entity_id is None else session.get(
+                        orm_models.Task,
+                        entity.entity_id)
                     if existing:
                         # -- Update --
                         existing.name = entity.name
