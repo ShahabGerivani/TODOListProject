@@ -5,7 +5,7 @@ from typing import Optional, List
 from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
-from src.TODOListProject.models import TaskStatus
+from src.TODOListProject.model.models import TaskStatus
 
 
 class Base(DeclarativeBase):
@@ -23,7 +23,7 @@ class Project(Base):
 class Task(Base):
     __tablename__ = "tasks"
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(unique=True)
+    name: Mapped[str]
     description: Mapped[Optional[str]]
     status: Mapped[TaskStatus] = mapped_column(Enum(TaskStatus, name="task_status"), default=TaskStatus.todo)
     deadline: Mapped[Optional[datetime]]

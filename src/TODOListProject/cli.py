@@ -1,7 +1,7 @@
 import dateutil.parser
 
 from src.TODOListProject.controller import ProjectTaskController
-from src.TODOListProject.models import TaskStatus
+from src.TODOListProject.model.models import TaskStatus
 
 
 def handle_view(controller: ProjectTaskController, action: list[str]) -> None:

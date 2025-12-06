@@ -82,11 +82,6 @@ class Task(NamedEntity):
 
     @deadline.setter
     def deadline(self, value: datetime | None):
-        """
-        :raises ValueError: If deadline is in the past
-        :param value:
-        :return:
-        """
         self.__deadline = value
 
 

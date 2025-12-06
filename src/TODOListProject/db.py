@@ -10,8 +10,8 @@ from sqlalchemy import create_engine, select, func
 from sqlalchemy.orm import Session
 
 from src.TODOListProject.exceptions import DBFullError
-from src.TODOListProject.models import NamedEntity, Project, Task
-import src.TODOListProject.orm_models as orm_models
+from src.TODOListProject.model.models import NamedEntity, Project, Task
+import src.TODOListProject.model.orm_models as orm_models
 
 
 class DBInterface(ABC):
