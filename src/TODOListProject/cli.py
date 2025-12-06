@@ -160,6 +160,7 @@ def run_cli(controller: ProjectTaskController):
     :return:
     """
     print("TODO List")
+    print("WARNING: CLI interface is deprecated. Please use the FastAPI HTTP interface instead.")
     action: list[str] = ["help"]
     while True:
         # Checking if the input format is correct
