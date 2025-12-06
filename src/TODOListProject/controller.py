@@ -2,7 +2,7 @@ from typing import cast
 from datetime import datetime
 
 from src.TODOListProject.db import DBInterface
-from src.TODOListProject.models import Project, TaskStatus, Task
+from src.TODOListProject.model.models import Project, TaskStatus, Task
 
 
 class ProjectTaskController:
@@ -24,7 +24,7 @@ class ProjectTaskController:
             Project(self.__db.get_next_id("projects"), name, description)
         )
 
-    def edit_project(self, project_id: int, name: str = None, description: str = None) -> None:
+    def edit_project(self, project_id: int, name: str | None = None, description: str | None = None) -> None:
         """
         Edit an existing project with given ID. If name and description are not None, the project will be updated.
         :param project_id:

@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from src.TODOListProject.controller import ProjectTaskController
 from src.TODOListProject.db import RelationalDB
-from src.TODOListProject.models import Project, TaskStatus
+from src.TODOListProject.model.models import Project, TaskStatus
 
 
 def close_overdue(controller: ProjectTaskController) -> None:

@@ -1,7 +1,7 @@
 import dateutil.parser
 
 from src.TODOListProject.controller import ProjectTaskController
-from src.TODOListProject.models import TaskStatus
+from src.TODOListProject.model.models import TaskStatus
 
 
 def handle_view(controller: ProjectTaskController, action: list[str]) -> None:
@@ -160,6 +160,7 @@ def run_cli(controller: ProjectTaskController):
     :return:
     """
     print("TODO List")
+    print("WARNING: CLI interface is deprecated. Please use the FastAPI HTTP interface instead.")
     action: list[str] = ["help"]
     while True:
         # Checking if the input format is correct
